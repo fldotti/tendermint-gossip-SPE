@@ -13,7 +13,13 @@ Gossip provides scalability and reliability guarantees by carefully designed rou
 However, consensus protocols must also handle message losses and process failures due to their fault-tolerant nature.
 This redundancy suggests that combining consensus and gossip protocols may lead to overhead.
 In short, it is unclear how efficient it is to use gossip as a black building-box for consensus.  Our first research question is thus:
-\emph{Can we identify and eliminate double redundancy situations of gossip and blockchain consensus combined, without sacrificing consensus properties ?}
+
+\vspace{-2mm}
+\begin{itemize}
+\item[] \emph{Can we identify and eliminate double redundancy situations of gossip and blockchain consensus combined, 
+            without sacrificing consensus properties ?}
+\end{itemize}
+\vspace{-2mm}
 
 To tackle this problem, we look into consensus and gossip combined.
 The idea is to reduce the overhead of gossip by exploiting consensus semantics.  We identify concrete cases of unneeded redundancy and argue that its elimination neither harms safety nor liveness.  Thus, we propose ways to reduce redundancy selectively.
@@ -22,8 +28,14 @@ Semantic filtering allows the gossip layer to discard messages that have become 
 Semantic aggregation shows that it is possible to aggregate several consensus messages into a single message without losing information. 
 %
 Although we use the Tendermint consensus protocol \cite{buchman2019latestgossipbftconsensus} to discuss ideas and design, the results generalize to Byzantine fault tolerant consensus protocols since the main aspects that enable filtering and aggregation are present in all of them. 
+%
+Having argued for the possibility and soundness of semantic filtering and semantic aggregation, the natural second research question addressed in the paper is:
+\vspace{-2mm}
+\begin{itemize}
+\item[]  \emph{What are the performance benefits of augmenting a gossip-based communication substrate with semantic extensions?}
+\end{itemize}
+\vspace{-2mm}
 
-Having argued for the possibility and soundness of semantic filtering and semantic aggregation, the natural second research question addressed in the paper is: \emph{What are the performance benefits of augmenting a gossip-based communication substrate with semantic extensions?}
 This question is answered experimentally by comparing classical gossip and combinations of filtering and aggregation for a series of workloads and topologies. The proposed design keeps modularity while dealing with cross-layer aspects.
 %
 In a 128-node network, our experiments show that filtering and aggregation lead to a reduction of 80\% in the number of gossip messages exchanged per consensus instance, leading to improved throughput and reduced latency.
@@ -34,8 +46,18 @@ In a 128-node network, our experiments show that filtering and aggregation lead 
 
 The performance advantage of semantic filtering and semantic aggregation is desirable as long as it does not come at the expense of the reliability that classic gossip provides.
 We consider this aspect in our third research question: 
-\emph{Do the proposed semantic extensions compromise consensus resilience ?}
-To answer this question, we include dishonest nodes ....
+
+\vspace{-2mm}
+\begin{itemize}
+\item[]  \emph{Do the proposed semantic extensions compromise consensus resilience ?}
+\end{itemize}
+\vspace{-2mm}
+
+To answer this question, we propose two experiments: 
+in the first one we consider that a dishonest node remains silent and does not propose a block in its turn; 
+in the second experiment we consider that a dishonest node omits part of the messages sent.   
+In the first case, we gradually increase the number of dishonest nodes; in the second case we gradually
+increase message drop.  In both cases the effect on baseline and proposed techniques are measured.
 %
 We found that Semantic Gossip-based Tendermint retains the resilience of gossip, ... \fd{ ... complete}
 

@@ -113,19 +113,19 @@ of evaluating them for every message forwarded, with the benefits that an
 effective filtering can provide.
 
 \paragraph{Semantic filtering in Tendermint} 
-As discussed  in Section \ref{sec:Tendermint}, a node progresses   to the next step when a quorum of \textsc{prevote} or \textsc{precommit} matching messages is received.  Additional messages of these types are not needed.  Also, duplicted messages are not usefull and need not to be forwarded.   The filtering rules thus state that a vote message is dropped by a node in the following cases:  
+As discussed  in Section \ref{sec:Tendermint}, a node progresses   to the next step when a quorum of \textsc{PREVOTE} or \textsc{PRECOMMIT} matching messages is received.  Additional messages of these types are not needed.  Also, duplicated messages are not useful and need not to be forwarded.   The filtering rules thus state that a vote message is dropped by a node in the following cases:  
 \begin{itemize}
-\item If a vote of the same type (either \textsc{prevote} or \textsc{precommit}), with the same originator,  height, round, and value has been already computed before by the node;
-\item If the vote (either \textsc{prevote} or \textsc{precommit}) is for a height and round for which the node has already handled a quorum of matching votes.
+\item If a vote of the same type (either \textsc{PREVOTE} or \textsc{PRECOMMIT}), with the same originator,  height, round, and value has been already computed before by the node;
+\item If the vote (either \textsc{PREVOTE} or \textsc{PRECOMMIT}) is for a height and round for which the node has already handled a quorum of matching votes.
 \end{itemize}
 
 \paragraph{Semantic filtering keeps consensus properties}
 
 Discarding messages at the gossip level is perceived as message loss (absence of) at the consensus level.  Thus, filtering could at most prevent progress but not safety.
-To ensure progress, a filtering mechanism cannot hinder nodes from receiving messages from a quorum. 
+To ensure progress, a filtering mechanism cannot hinder nodes from receiving messages needed to build a quorum. 
 %
 Notice that with the first filtering rule the message dropped has been handled before and
-with the second filtering rule, a node discards messages after having handled a quorum of matching messages.   In both cases, since the node handled the previous messages, they were already forwarded via gossip to other nodes.  
+with the second filtering rule, a node discards messages after having handled a quorum of matching messages.   In both cases, since the node handled the previous messages, they were already forwarded to other nodes.  
 
 \fp{The text here is unclear, as the message already could be lost.}
 
@@ -136,14 +136,14 @@ with the second filtering rule, a node discards messages after having handled a 
 \subsubsection{Semantic aggregation}
 
 The second technique provides the consensus algorithm with the possibility to
-replace a number of similar or related messages, which will be sent to a peer,
+replace a number of similar or related messages, which will be forwarded to other nodes,
 with a single message comprising the information carried by the original
-messages.
+replaced messages.
 This technique explores the scenario in which the gossip layer has multiple
-pending messages to send to a peer, so that some of them are likely, according
+pending messages to send to a peer node, so that some of them are likely, according
 with the consensus semantics, to be aggregated.
 It is an opportunistic mechanism that aims to reduce the number of messages
-exchanged by processes via gossip, especially when they operate under moderate
+exchanged by nodes via gossip, especially when they operate under moderate
 to high load.
 
 Semantic aggregation is also implemented through a set of rules that, from a
@@ -157,11 +157,11 @@ original messages that it aggregates.
 Messages that are not prone to aggregation, or for which aggregation is not
 deemed advantageous by the consensus algorithm, are not affected by this
 technique.
-They are kept in the list of pending messages, and are forwarded to the peers as
+They are kept in the list of pending messages, and are forwarded to peer nodes as
 usual.
 
 Semantic aggregation rules can be either reversible or not.
-When a process receives from a peer a message aggregated using a reversible
+When a node receives from a peer node a message aggregated using a reversible
 rule, it reconstructs the original messages and treats them as regular messages.
 That is, messages received for the first time are delivered to the
 consensus algorithm and forwarded to other peers.
@@ -189,36 +189,46 @@ by semantic aggregation rules.
 \paragraph{Semantic aggregation in Tendermint}
 
 Regarding Tendermint, semantic aggregation is also applied to 
-\textsc{prevote} and \textsc{precommit} voting messages.
-Given a subset of messages to be sent to a peer, messages of the same type (\textsc{prevote} or \textsc{precommit}), for the same height, round and value (block id) can be aggregated.
-The aggregated message carries a list of pairs $\langle origin, signature \rangle$ identifying originators of the  messages aggregated, and only once the identical contents.
+\textsc{PREVOTE} and \textsc{PRECOMMIT} voting messages.
+Given a subset of messages to be sent to a peer node, messages of the same type, 
+for the same height, round and value (block id) can be aggregated.
+The aggregated message carries a list of pairs $\langle origin, signature \rangle$ 
+identifying originators of the  messages aggregated, and only once the identical contents.
 
 \paragraph{Semantic aggregation keeps consensus properties}
 
-The basic requirement for a sound aggregation strategy is that the information conveyed by an aggregated message is equivalent to the original non-aggregated ones, enabling the same decisions to be taken at the destination.
+The basic requirement for a sound aggregation strategy is that the information conveyed by an 
+aggregated message is equivalent to the original non-aggregated ones, enabling the same decisions to be taken at the destination.
 %
-%Observe that the aggregation rule proposed for Tendermint does not exclude information, only data.\fp{I don't get this. What's the difference between information and data?}
-
+%Observe that the aggregation rule proposed for Tendermint does not exclude information, only data.\fp{I don't get this. What's the difference between information and data?
 Notice that the restriction to aggregation is strong: aggregated messages should be identical, only stemming from different originators.   
 %
-The receiver of the aggregated message, be it \textsc{prevote} or \textsc{precommit}, will compute the exact same votes as for the non-aggregated messages.
+The receiver of the aggregated message, be it \textsc{PREVOTE} or \textsc{PRECOMMIT}, will compute the exact same votes as for the non-aggregated messages.
 %
 %A strong aggregation restriction makes it easier to show sound and, although it may seem less effective, as consensus protocols often use communication phases with same message types sent among processes, aggregation shows important benefits, as discussed further in the paper.\fp{Convoluted sentence...}
 
 \subsubsection{Semantic Gossip and BFT}
 
-To ensure that aggregation and filtering are not exploited by dishonest nodes,\footnote{For example, a dishonest node could forge messages to exploit the proposed mechanisms.  Consider a dishonest node $dh$ that forges a \textsc{prevote} message for a given height and round, pretending to be node $a$, and sends it to node $b$.  Since gossip does not verify messages, $b$ would record $dh$'s message and on the occasion of the original message from $a$, it would be filtered out with the effect of possibly preventing progress.} 
-we ensure that any message is verified before the respective decisions are made by Semantic Gossip. \fp{I don't get this part.}
+A typical gossip layer is agnostic to the contents carried.  Since semantic gossip introduces forwarding decisions based 
+on message contents related to the application layer,  in a byzantine environment 
+care has to be taken that aggregation and filtering are not exploited by dishonest nodes.
+Filtering and aggregation decisions have to be taken with the same security concerns as used by the application level
+when handling messages.    
+
+The security measure taken at consensus layer is to ensure that any received message has its signature verified
+before processing it.   We adopt the same measure for semantic gossip.
+From an engineering perspective, since signature verification is a costly procedure, 
+instead of performing verification additionally at the gossip layer we propose an interface from consensus to the gossip layer 
+to return a copy of delivered and verified messages.   After this verification, gossip proceeds to the semantic decisions.
+This aspect is shown in Figure \ref{fig:architecture_sg} with the loop-back arch from signature verification at consensus 
+to the filtering input queue at the semantic gossip layer.
 
 
+%To ensure that aggregation and filtering are not exploited by dishonest nodes,\footnote{For example, a dishonest node could forge messages to exploit the proposed mechanisms.  Consider a dishonest node $dh$ that forges a \textsc{prevote} message for a given height and round, pretending to be node $a$, and sends it to node $b$.  Since gossip does not verify messages, $b$ would record $dh$'s message and on the occasion of the original message from $a$, it would be filtered out with the effect of possibly preventing progress.} 
+%we ensure that any message is verified before the respective decisions are made by Semantic Gossip. 
 
-
-From an engineering perspective, as signature verification is one of the first measures taken at the consensus layer to avoid attacks, and being a costly procedure, instead of performing verification additionally at the gossip layer we propose an interface to return a copy of delivered and verified messages to the gossip layer.   With this, gossip can further handle the message without increasing the overall overhead.
-This aspect is shown in Figure \ref{fig:architecture_sg} with the loop-back arch from signature verification at consensus to the filtering input queue at the semantic gossip layer.
-
-%\fd{argue this is enough to handle bizantine processes ?}
-
-%Semantic Gossip adopts that  Filtering and Aggregation decisions should be taken also based on verified messages.  
+\fp{I don't get this part.}
+\fd{reviewed}
 
 
 \subsection{Implementation}
@@ -296,13 +306,14 @@ Figure \ref{fig:architecture_sg} (right) depicts how the classic gossip architec
 
 % \end{figure}
 
-\paragraph{Semantic filtering} is provided by allowing the consensus algorithm to implement
+\paragraph{Semantic filtering} Semantic filterin is provided by allowing the consensus algorithm to implement
 a {\em validate} function, which receives a message and a destination peer, and
 returns a boolean:
 
 \begin{verbatim}
 Bool validate(Message, Peer)
 \end{verbatim}
+
 The {\em validate} function is invoked by the {\em filter} module at the gossip layer when a message has not been dropped due to duplicates or signature violation, and is considered for forwarding.
 %
 If the function returns false, the message is dropped, as the decision was to
@@ -320,7 +331,7 @@ saving by filtering out messages that would be sent to a peer
 should be considered.
 
 
-\paragraph{Semantic aggregation} is provided through the implementation of a pair of
+\paragraph{Semantic aggregation} Semantic aggregation is provided through the implementation of a pair of
 functions, {\em aggregate} and {\em disaggregate}, by the consensus layer:
 
 \begin{verbatim}
