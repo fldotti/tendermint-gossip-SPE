@@ -1,0 +1,124 @@
+%\documentclass[lettersize,journal]{IEEEtran}
+\documentclass[12p,AMS,STIX1COL]{WileyNJD-v5}
+%\usepackage{amsmath,amsfonts}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{array}
+%\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\usepackage{textcomp}
+%\usepackage{stfloats}
+%\usepackage{url}
+%\usepackage{verbatim}
+%\usepackage{graphicx}
+%\usepackage{cite}
+\usepackage{enumitem}
+
+%\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+%\usepackage{url}
+%\usepackage{hyperref}
+%\usepackage{subcaption}
+
+%\usepackage{xspace}
+\usepackage{xcolor}
+%\usepackage{graphicx}
+%\usepackage[noend]{algorithmic}
+%\usepackage{algorithm}
+%\usepackage[noend]{distribalgo}
+%\usepackage{subfig}
+%\usepackage{multirow}
+
+\newcommand{\new}{\color{black}}
+\newcommand{\old}{\color{black}}
+
+\newcommand{\dc}[1]{\textit{\textcolor{red}{[rjs]: #1}}}
+\newcommand{\fp}[1]{\textit{\textcolor{blue}{[fp]: #1}}}
+\newcommand{\zm}[1]{\textit{\textcolor{red}{[ef]: #1}}}
+\newcommand{\nm}[1]{\textit{\textcolor{red}{[nm]: #1}}}
+\newcommand{\fd}[1]{\textit{\textcolor{magenta}{[fd]: #1}}}
+\newcommand{\rg}[1]{{\color{red}RFG: #1}}
+
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+
+\articletype{Article Type}
+\received{00}
+\revised{00}
+\accepted{00}
+
+\begin{document}
+
+\title{Boosting Blockchain Consensus with Semantic Gossip}
+%\title{Semantic Gossip for Efficient Blockchain Consensus}
+%\title{Semantic Gossip to Scale Blockchain Systems}
+
+\author[1]{Daniel Cason}
+\author[2]{Ricardo Guimaraes}
+\author[1]{Nenad Milosevic}
+\author[1]{Patrick Eugster}
+\author[3]{Zarko Milosevic}
+\author[2]{Fernando Dotti}
+\author[1]{Fernando Pedone}
+
+\authormark{Author Name}
+\titlemark{Author Guidelines}
+
+\address[1]{\orgname{Universit\`{a} della Svizzera italiana},
+\orgaddress{\state{Lugano}, \country{Switzerland}}}
+
+\address[2]{\orgdiv{School of Technology}, \orgname{Pontif\'{i}cia Universidade Cat\'{o}lica do Rio Grande do Sul},
+\orgaddress{\state{Porto Alegre}, \country{Brazil}}}
+
+\address[3]{\orgname{Informal Systems},
+\orgaddress{\state{Toronto}, \country{Canada}}}
+
+ 
+\corres{<Corresponding author information>}
+
+\presentaddress{<author present address information>} 
+
+\abstract[Abstract]{\input{0-abstract}}
+
+\keywords{Consensus, Gossip, BFT, Blockchains}
+
+\footnotetext{title footnote...}
+
+\maketitle
+
+
+%\input{structureDrat}
+
+\input{1-introduction}
+
+\input{2-background}
+
+\input{3-gossip}
+
+\input{4-evaluation}
+
+\input{5-relatedwork}
+
+\input{6-conclusion}
+
+
+%\section*{Acknowledgments}
+%This work was partially supported by the Swiss National Science Foundation (\# 175717), Funda\c{c}\~{a}o de Amparo \`{a} Pesquisa do Estado Do Rio Grande do Sul---FAPERGS PqG 07/21, Conselho Nacional de Desenvolvimento Cient\'{i}fico e Tecnol\'{o}gico---CNPq Universal 18/21, PUCRS-PrInt,  Coordena\c{c}\~{a}o de Aperfei\c{c}oamento de Pessoal de N\'{i}vel Superior (CAPES), Brazil, Finance Code 001, and FAPDF through EDITAL 08/2023---FAP Participa.
+
+%% the bibliography file.
+\bibliographystyle{wileyNJD-AMA}
+\bibliography{report}
+
+\section{Author Biography}
+
+\begin{biography}{\includegraphics[width=76pt,height=76pt,draft]{figures/128nodes-byzantine.png}}
+      {\textbf{Author Name.} Please check with the journal’s author guidelines
+      whether author biographies are required. They are usually only
+      included for review-type articles, and typically require photos
+      and brief biographies for each author.}
+\end{biography}
+
+
+\end{document}
+
+

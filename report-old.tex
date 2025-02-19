@@ -1,0 +1,50 @@
+\documentclass[sigplan,anonymous,nonacm,review]{acmart}
+\acmSubmissionID{274}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+%% Makes FiXme margin notes more readable
+%\usepackage{fixme}
+%\setlength{\marginparwidth}{1.5cm}
+%\fxsetup{status=draft}
+
+% Color
+\usepackage{xcolor}
+\newcommand{\dc}[1]{\textit{\textcolor{red}{[rjs]: #1}}}
+\newcommand{\fp}[1]{\textit{\textcolor{blue}{[fp]: #1}}}
+\newcommand{\zm}[1]{\textit{\textcolor{red}{[ef]: #1}}}
+\newcommand{\nm}[1]{\textit{\textcolor{red}{[ef]: #1}}}
+
+\begin{document}
+
+\title{Semantic Gossip}
+
+%% The abstract is a short summary of the work to be presented in the
+%% article. It should come BEFORE \maketitle command.
+\begin{abstract}
+\input{abstract.txt}
+\end{abstract}
+
+\maketitle
+
+\input{introduction}
+
+\input{background}
+
+\input{gossip}
+
+\input{evaluation}
+
+\input{relatedwork}
+
+\input{conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{report}
+
+\end{document}

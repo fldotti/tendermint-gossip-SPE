@@ -1,0 +1,99 @@
+%!TEX root =  report.tex
+\section{Related work}
+\label{sec:relwork}
+\color{teal}
+Gossip algorithms were first introduced by Demers et al.~\cite{demers87} to
+manage replica consistency in the Xerox Clearinghouse Service~\cite{oppen83}.
+The proposed algorithms were specific for the dissemination of database
+updates, assumed to not be very frequent (a few per second, at most).
+%
+The adoption of gossip mechanisms as a building block for the dissemination of
+arbitrary application messages derives from Bimodal Multicast~\cite{Birman99}.
+The algorithm consists of two phases.
+In the first phase, messages are disseminated in a best-effort fashion through
+multicast trees, using IP-multicast when available.
+In the second phase, processes periodically send to a random-selected peer a list
+of recently received messages, so that to retransmit, on demand, messages that
+have not yet been received by the peer.
+%
+Since then, multiple approaches have been proposed to improve throughput and
+robustness of gossip dissemination~\cite{birman01, eugster03, gupta02, kempe04,
+lin99, leitao07, melamed04, vogels03}.
+
+Research in gossip-based broadcast algorithms has focused essentially on two
+issues.
+%
+First, the efficient dissemination of messages in large-scale systems through
+the adoption of overlay networks.
+Proposed approaches consider building pseudo-random network overlays,
+by selecting links based on geographic proximity and available
+bandwidth~\cite{kempe04, melamed04}, or topological and connectivity
+properties~\cite{lin99, leitao07, voulgaris13}.
+%
+A second research direction addresses the cost/effectiveness of epidemic
+mechanisms which enable processes to request messages that they failed to
+receive.
+The efficiency of these anti-entropy~\cite{demers87, Birman99} or gossip
+repair~\cite{birman01, eugster03, gupta02, vogels03} mechanisms
+is crucial to improve the reliability of gossip dissemination.
+%
+Efforts have also been made to develop gossip-based services to support
+large-scale broadcast and multicast algorithms, such as failure
+detection~\cite{renesse98}, group membership~\cite{ganesh03, johansen06},
+monitoring and management systems~\cite{renesse02}.
+
+Semantic Gossip differs from existing approaches because it is designed to
+support distributed applications that, by themselves, include layers of
+redundancy.
+
+\color{black}
+
+This is the case of Paxos, which includes both typical broadcast steps (to
+propose values) and the exchange of control messages to ensure agreement, which
+is a strong form of reliability.
+
+Probabilistic Atomic Broadcast~\cite{felber02} is the algorithm whose behavior
+most resembles the operation of Paxos atop gossip.
+%is most similar to 
+The algorithm proceeds in rounds, in each round a process can broadcast a
+message and should vote for a message, either broadcast or received during the
+round.
+Processes periodically exchange the list of messages and associated votes with
+a random subset of peers.
+When the number of votes reaches a threshold, all messages in the list are
+delivered, and the process proceeds to the next round.
+%
+As in our Paxos deployment, processes send and forward values (broadcast
+messages) and votes to peers via gossip.
+Unlike Paxos, the algorithm of~\cite{felber02} only provides probabilistic
+safety guarantees: two processes may deliver messages in distinct orders, which
+is equivalent in Paxos to deciding different values in the same consensus
+instance.
+
+\color{teal}
+
+Even though most work on gossip has considered benign failures (e.g., process crashes), 
+recent Byzantine fault tolerant consensus protocols for large-scale environments (e.g., blockchain) 
+have considered the use of gossip as underlying communication substrate.
+Tendermint
+%\footnote{\url{https://tendermint.com/}} 
+is a blockchain middleware
+based on a BFT consensus algorithm~\cite{bucham18} designed for gossip
+communication.  Tendermint has its own gossip layer implementation, that is
+application-specific and tightly coupled with the consensus implementation.
+%
+Casper~\cite{buterin17}, the BFT consensus algorithm proposed to replace the
+proof-of-work core of the Ethereum blockchain is also designed for a
+gossip-based environment.
+%\footnote{\url{https://ethereum.org/}}
+%
+HotStuff~\cite{maofan18}, the BFT consensus protocol at the core of the Libra
+Blockchain~\cite{amsden20}, although not designed for gossip-based
+communication, considers its adoption as the number of processes participating
+on consensus (validator nodes) grows~\cite{libra18}.
+The key architectural aspect that distinguishes these proposals from Semantic
+Gossip is that gossip in blockchain systems is intertwined with consensus
+logic.  Semantic Gossip exploits application (i.e., consensus) semantics
+without giving up modularity.
+
+\color{black}

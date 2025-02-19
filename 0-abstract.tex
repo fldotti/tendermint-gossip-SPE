@@ -1,0 +1,49 @@
+%\fd{Title is provisory}
+%
+%\fd{Color legend: {\new text blue is new}. }
+%
+%\fd{{\old black is non modified from 'Paxos Gossip - maybe unuseful but here to check it and remember discussions.}}
+%
+%\fd{\color{violet} violet is existing text reviewed/modified to this paper}
+%
+%\fd{{\color{teal}parts in in green/teal is old text that is valid for this paper}.  
+%   we have to see how to reuse or not.   this is to be considered a new paper, not an extension ... correct ?}
+%
+%\fd{Draft abstract to check if these are the main aspects.}
+%\new
+State Machine Replication has been extensively used to provide highly-available, strongly-consistent systems.  Modern systems often require additionally to scale to several nodes.  This is the case of 
+%This is the case of several existing state machine replication based systems that have to span service provisioning to a wider geographical scope. 
+several blockchains, that have to run consensus among dozens to hundreds of nodes.
+
+Gossip allows to scale communication to larger sets of nodes and has been recently considered as communication layer to support consensus.
+%
+By their nature, both consensus protocols and gossip handle message losses and process failures.   This double redundancy means that it is not yet clear how efficient is to use gossip as a black building-box for consensus.
+
+In this paper, we investigate these aspects in the context of blockchains.
+%Due to their stringent scalability needs, this paper investigates    
+%
+The paper discusses how far redundancy can be eliminated without compromising consensus' safety and liveness.
+%
+Then it proposes to selectively eliminate redundancy considering the combined use of protocols.
+%
+To accomplish that, a cross layer mechanism is proposed that, while keeping modularity, uses message semantics from consensus at the gossip level to reduce overhead while forwarding messages.   With a prototype implementing the ideas, experiments with 32 and 128 nodes show that the mechanisms proposed respectively enhance throughput 1.24 $\times$ and  $3.42 \times$ while slightly reducing latency.  
+% this is derived from pictures 3 to 6
+
+Furthermore, we argue and show results that the proposed redundancy elimination mechanisms do not harm resiliency...
+
+%\old
+
+
+% Gossip-based consensus protocols have been recently proposed to confront the challenges faced by state machine replication in large geographically distributed systems.
+
+% It is unclear, however, to which extent consensus and gossip communication fit together.
+
+% On the one hand, gossip communication has been shown to scale to large settings and efficiently handle participant failures and message losses. 
+
+% On the other hand, gossip may slow down consensus. 
+
+% Moreover, gossip's inherent redundancy may be unnecessary since consensus naturally accounts for participant failures and message losses. 
+
+% This paper investigates the suitability of gossip as a communication building block for consensus.
+
+% We answer three questions: How much overhead does classic gossip introduce in consensus? Can we design consensus-friendly gossip protocols? Would more efficient gossip protocols still maintain the same reliability properties of classic gossip?

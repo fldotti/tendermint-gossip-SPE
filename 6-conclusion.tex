@@ -1,0 +1,13 @@
+%!TEX root =  report.tex
+\section{Conclusions}
+\label{sec:conclusions}
+\color{teal}
+This paper introduces Semantic Gossip, a communication substrate that takes application semantics into account to optimize performance.
+Semantic Gossip relies on two techniques, semantic filtering and semantic aggregation.
+With semantic filtering, the gossip protocol can stop propagating messages that have become redundant from the perspective of the application.
+With semantic aggregation, the gossip protocol can replace multiple messages by a single message of equivalent meaning.
+Both techniques reduce the number of messages that are propagated by gossip without penalizing the resilience of the consensus protocol.
+\color{black}
+
+We have demonstrated the usefulness of Semantic Gossip using Tendermint, a well-known consensus protocol.  It enables to scale ...
+

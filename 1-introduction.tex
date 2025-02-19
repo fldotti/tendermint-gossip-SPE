@@ -1,0 +1,51 @@
+%!TEX root =  report.tex
+\section{Introduction}
+\label{sec:intro}
+
+Consensus is a fundamental abstraction in many fault-tolerant distributed systems~\cite{Lam78,schneider90}. 
+Although consensus and state machine replication have been extensively studied under various conditions (e.g., synchrony assumptions, failure models), most studies consider consensus deployments with few participants. 
+This is often justified because deployments with more than three or five participants are considered unrealistic.
+Modern applications, however, challenge this belief by running consensus among many participants.
+For example, some blockchain systems run consensus among dozens to hundreds of nodes~\cite{bucham18,buterin17,libra18}.
+
+To accommodate a large number of participants, failures, and geo-distribution, some blockchain consensus protocols rely on gossip communication to handle the interactions of consensus participants \cite{Hyperledger,bucham18,buterin17,libra18}.
+Gossip provides scalability and reliability guarantees by carefully designed rounds of message exchanges, in which processes communicate with subsets of other processes~\cite{demers87, Birman99}.
+However, consensus protocols must also handle message losses and process failures due to their fault-tolerant nature.
+This redundancy suggests that combining consensus and gossip protocols may lead to overhead.
+In short, it is unclear how efficient it is to use gossip as a black building-box for consensus.  Our first research question is thus:
+\emph{Can we identify and eliminate double redundancy situations of gossip and blockchain consensus combined, without sacrificing consensus properties ?}
+
+To tackle this problem, we look into consensus and gossip combined.
+The idea is to reduce the overhead of gossip by exploiting consensus semantics.  We identify concrete cases of unneeded redundancy and argue that its elimination neither harms safety nor liveness.  Thus, we propose ways to reduce redundancy selectively.
+The proposed semantic gossip design optimizes gossip with two techniques, \emph{semantic filtering} and \emph{semantic aggregation}.
+Semantic filtering allows the gossip layer to discard messages that have become redundant or obsolete according to the consensus logic.
+Semantic aggregation shows that it is possible to aggregate several consensus messages into a single message without losing information. 
+%
+Although we use the Tendermint consensus protocol \cite{buchman2019latestgossipbftconsensus} to discuss ideas and design, the results generalize to Byzantine fault tolerant consensus protocols since the main aspects that enable filtering and aggregation are present in all of them. 
+
+Having argued for the possibility and soundness of semantic filtering and semantic aggregation, the natural second research question addressed in the paper is: \emph{What are the performance benefits of augmenting a gossip-based communication substrate with semantic extensions?}
+This question is answered experimentally by comparing classical gossip and combinations of filtering and aggregation for a series of workloads and topologies. The proposed design keeps modularity while dealing with cross-layer aspects.
+%
+In a 128-node network, our experiments show that filtering and aggregation lead to a reduction of 80\% in the number of gossip messages exchanged per consensus instance, leading to improved throughput and reduced latency.
+
+%When a single technique is adopted, there is a 40\% to 45\% reduction in the
+%number of messages exchanged by processes via gossip, when compared with the
+%classic, non-optimized, gossip communication substrate.
+
+The performance advantage of semantic filtering and semantic aggregation is desirable as long as it does not come at the expense of the reliability that classic gossip provides.
+We consider this aspect in our third research question: 
+\emph{Do the proposed semantic extensions compromise consensus resilience ?}
+To answer this question, we include dishonest nodes ....
+%
+We found that Semantic Gossip-based Tendermint retains the resilience of gossip, ... \fd{ ... complete}
+
+
+The remaining of the paper is organized as follows:
+    Section~\ref{sec:background} defines the system model and introduces background information on gossip and Tendermint;
+    Section~\ref{sec:semantic} proposes the design and implementation of Semantic Gossip in the context of blockchains, focussing the Tendermint protocol.  
+    The semantic gossip mechanisms for filtering and aggregation are proposed,
+    discussed to preserve consensus properties, and their design/implementation presented;
+ Section~\ref{experiments} describes the evaluation of Tendermint using gossip, and Semantic Gossip communication.   The evaluation starts with a topologycal study to generalize observations, being follwed by throughput and latency assessment using different combinations of semantic gossip mechanisms.
+    The last part brings an assessement of the resilience of Tendermint without and with Semantic Gossip, varying its mechanisms, in the presence of increasing number of byzantine nodes;
+    Section~\ref{sec:relwork} surveys related work and Section~\ref{sec:conclusions} concludes the paper.
+    
